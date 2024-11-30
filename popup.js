@@ -345,4 +345,61 @@ document.getElementById("fetch_linkedin").addEventListener("click", () => {
             }
         });
     });
+    // Event listener for the button click
+document.getElementById('generate-cover-letter').addEventListener('click', generateCoverLetter);
+
+// Function to generate the cover letter using the Gemma-2 API (via RapidAPI)
+function generateCoverLetter() {
+    const jobTitle = document.getElementById('job-title').value.trim();
+    const companyName = document.getElementById('company-name').value.trim();
+
+    // Simple validation
+    if (!jobTitle || !companyName) {
+        alert("Please enter both job title and company name.");
+        return;
+    }
+
+    // Show loading message in the textarea
+    document.getElementById('cover-letter').value = "Generating cover letter... Please wait.";
+
+    // Create the prompt for the API request
+    const prompt = Write a professional cover letter for the position of ${jobTitle} at ${companyName}.;
+
+    // Prepare the data for the API request
+    const data = JSON.stringify({
+        model: 'gemma-2-27b',  // Model you are using
+        messages: [
+            {
+                role: 'user',
+                content: prompt
+            }
+        ]
+    });
+
+    // Create the XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    // Event listener for when the request completes
+    xhr.addEventListener('readystatechange', function () {
+        if (this.readyState === this.DONE) {
+            const response = JSON.parse(this.responseText); // Parse the JSON response
+            if (response && response.choices && response.choices.length > 0) {
+                const coverLetter = response.choices[0].message.content.trim(); // Extract the content of the cover letter
+                document.getElementById('cover-letter').value = coverLetter; // Set the content in the textarea
+            } else {
+                document.getElementById('cover-letter').value = "Sorry, there was an issue generating the cover letter."; // Show an error message if no content is returned
+            }
+        }
+    });
+
+    // Open the request with the POST method and the appropriate URL
+    xhr.open('POST', 'https://google-gemma-2.p.rapidapi.com/');
+    xhr.setRequestHeader('x-rapidapi-key', 'c68972c2f1mshb8f53a77666566ap1ee6c5jsn1d451fb0fc39');
+    xhr.setRequestHeader('x-rapidapi-host', 'google-gemma-2.p.rapidapi.com');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    // Send the request with the data
+    xhr.send(data);
+}
 });
