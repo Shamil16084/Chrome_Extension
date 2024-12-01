@@ -390,11 +390,10 @@ document.getElementById('generate-cover-letter').addEventListener('click', funct
         }
     };
 
-    xhr.open('POST', 'https://google-gemma-2.p.rapidapi.com/');
-    xhr.setRequestHeader('x-rapidapi-key', '18e6d8e50amsh13bf0f8b307472ep11e4d2jsnfcf9fa583272');
+ xhr.open('POST', 'https://google-gemma-2.p.rapidapi.com/');
+    xhr.setRequestHeader('x-rapidapi-key', '6a67baeec0msh3e380fb6a2e88fdp1c9f50jsncfd6a665a8b3');
     xhr.setRequestHeader('x-rapidapi-host', 'google-gemma-2.p.rapidapi.com');
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
+    xhr.setRequestHeader('Content-Type', 'application/json'); 
     xhr.send(data);
 });
 
